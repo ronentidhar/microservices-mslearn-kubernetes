@@ -1,0 +1,27 @@
+apiVersion: skaffold/v4beta3
+kind: Config
+manifests:
+  rawYaml:
+    - ./backend-deploy.yml
+    - ./frontend-deploy.yml
+build:
+  local:
+    push: false
+  artifacts:
+    - image: td/pizzabackend
+      context: backend
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "**/*"
+            dest: .
+
+    - image: td/pizzafrontend
+      context: frontend
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "**/*"
+            dest: .
